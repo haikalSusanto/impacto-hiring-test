@@ -11,19 +11,27 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "categories")
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Category {
 
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "category_seq_gen")
+    @SequenceGenerator(name = "category_seq_gen", sequenceName = "category_sequence", allocationSize = 1)
     private Integer id;
 
     @Column(nullable = false)
@@ -32,6 +40,7 @@ public class Category {
     @OneToMany
     @JoinColumn(name = "category_id")
     @JsonManagedReference
+    @OrderBy("id ASC")
     private Set<Product> products;
-    
+
 }
