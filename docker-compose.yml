@@ -1,6 +1,23 @@
 version: "3.8"
 
 services:
+  main-app:
+    build: .
+    container_name: main-app
+    restart: always
+    environment:
+      # Add any necessary environment variables for your application here
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/${POSTGRES_DB:-appdb}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-appuser}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-securepassword}
+    ports:
+      - "${MAIN_APP_PORT:-8080}:8080"
+    depends_on:
+      - postgres-db
+    networks:
+      - app-network
+
+
   postgres-db:
     image: postgres:15-alpine
     container_name: ${POSTGRES_CONTAINER_NAME:-postgrase-db}
