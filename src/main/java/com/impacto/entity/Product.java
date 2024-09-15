@@ -1,7 +1,6 @@
 package com.impacto.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,18 +20,25 @@ import lombok.Setter;
 public class Product {
 
     @Id
-    @Column(name = "id")
+    // @GeneratedValue(strategy = GenerationType.SEQUENCE, generator =
+    // "product_seq_gen")
+    // @SequenceGenerator(name = "product_seq_gen", sequenceName =
+    // "product_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // @Column(columnDefinition = "serial")
     private Integer id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String code;
 
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
+    private Integer price;
+
     @ManyToOne
-    @JoinColumn(name = "category_id", insertable = false, updatable = false)
+    @JoinColumn(name = "category_id")
     @JsonBackReference
     private Category category;
 }
